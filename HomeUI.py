@@ -1,9 +1,14 @@
 import sys
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
+import GlobalValues
+import AudioUI
 
 class HomeUI(QtGui.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, controller, parent=None):
         super(HomeUI, self).__init__(parent)
+
+        self.controller = controller
+
         background_label = QtGui.QLabel(self)
         background_label.setStyleSheet("background-image: url(images/background.jpg);")
         background_label.resize(800,450)
@@ -15,7 +20,7 @@ class HomeUI(QtGui.QWidget):
         self.titleBar.setStyleSheet("background-color:black;")
         topLayout = QtGui.QHBoxLayout(self.titleBar) # add layout onto a widget
         self.homeBt = QtGui.QLabel()
-        self.homeBt.setPixmap(QtGui.QPixmap('images/home_icon.png'))
+        self.homeBt.setPixmap(GlobalValues.home_icon)
         self.timeInfo = QtGui.QLabel('8:00')
         topLayout.addWidget(self.homeBt)
         topLayout.setStretch(0,3)
@@ -25,17 +30,63 @@ class HomeUI(QtGui.QWidget):
         # design bottom tool bar
         self.bottomBar = QtGui.QLabel(self)
         self.bottomBar.setStyleSheet("background-color:lightgray;")
+        bottomLayout = QtGui.QHBoxLayout(self.bottomBar) # add horizontal layout on bottom bar
+
+        self.audioBt = QtGui.QLabel(self)
+        self.audioBt.setPixmap(GlobalValues.audio_icon)
+        self.audioBt.setAlignment(QtCore.Qt.AlignCenter)
+        self.audioBt.mousePressEvent = self.audioBtPress
+        self.audioBt.mouseReleaseEvent = self.audioBtRelease
+
+        self.climateBt = QtGui.QLabel(self)
+        self.climateBt.setPixmap(GlobalValues.climate_icon)
+        self.climateBt.setAlignment(QtCore.Qt.AlignCenter)
+        self.climateBt.mousePressEvent = self.climateBtPress
+        self.climateBt.mouseReleaseEvent = self.climateBtRelease
+
+        self.phoneBt = QtGui.QLabel(self)
+        self.phoneBt.setPixmap(GlobalValues.phone_icon)
+        self.phoneBt.setAlignment(QtCore.Qt.AlignCenter)
+        self.phoneBt.mousePressEvent = self.phoneBtPress
+        self.phoneBt.mouseReleaseEvent = self.phoneBtRelease
+
+        self.appsBt = QtGui.QLabel(self)
+        self.appsBt.setPixmap(GlobalValues.apps_icon)
+        self.appsBt.setAlignment(QtCore.Qt.AlignCenter)
+        self.appsBt.mousePressEvent = self.appsBtPress
+        self.appsBt.mouseReleaseEvent = self.appsBtRelease
+
+        self.settingBt = QtGui.QLabel(self)
+        self.settingBt.setPixmap(GlobalValues.setting_icon)
+        self.settingBt.setAlignment(QtCore.Qt.AlignCenter)
+        self.settingBt.mousePressEvent = self.settingBtPress
+        self.settingBt.mouseReleaseEvent = self.settingBtRelease
+        
+        bottomLayout.addWidget(self.audioBt)
+        bottomLayout.setStretch(0,1)
+        bottomLayout.addWidget(self.climateBt)
+        bottomLayout.setStretch(1,1)
+        bottomLayout.addWidget(self.phoneBt)
+        bottomLayout.setStretch(2,1)
+        bottomLayout.addWidget(self.appsBt)
+        bottomLayout.setStretch(3,1)
+        bottomLayout.addWidget(self.settingBt)
+        bottomLayout.setStretch(4,1)
+
 
         # design middle content
         middle_box = QtGui.QGridLayout()
         middle_box.setContentsMargins(15, 10, 15, 10)
-        self.button_left = QtGui.QPushButton()
+
+        # declear the audio info variable
+
+        self.button_left = QtGui.QPushButton(GlobalValues.audio_source_string)
         self.button_left.setStyleSheet("background-color:lightgray;")
         self.button_left.setSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
         self.button_rightTop = QtGui.QPushButton()
         self.button_rightTop.setStyleSheet("background-color:lightgray;")
         self.button_rightTop.setSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
-        self.button_rightBottom = QtGui.QPushButton()
+        self.button_rightBottom = QtGui.QPushButton(GlobalValues.phone_name_string)
         self.button_rightBottom.setStyleSheet("background-color:lightgray;")
         self.button_rightBottom.setSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Expanding)
 
@@ -51,4 +102,36 @@ class HomeUI(QtGui.QWidget):
         layout.addWidget(self.bottomBar)
         layout.setStretch(2,3)
         self.setLayout(layout)
-        # you might want to do self.button.click.connect(self.parent().login) here
+
+    def audioBtPress(self, event):
+        self.audioBt.setStyleSheet("background-color:lightblue;")
+
+    def audioBtRelease(self, event):
+        self.audioBt.setStyleSheet("background-color:lightgray;")
+        # audioUI = AudioUI.AudioUI(self.controller)
+        # self.controller.central_widget.addWidget(audioUI)
+        self.controller.central_widget.setCurrentWidget(self.controller.audioUI)
+
+    def climateBtPress(self, event):
+        self.climateBt.setStyleSheet("background-color:lightblue;")
+
+    def climateBtRelease(self, event):
+        self.climateBt.setStyleSheet("background-color:lightgray;")
+
+    def phoneBtPress(self, event):
+        self.phoneBt.setStyleSheet("background-color:lightblue;")
+
+    def phoneBtRelease(self, event):
+        self.phoneBt.setStyleSheet("background-color:lightgray;")
+
+    def appsBtPress(self, event):
+        self.appsBt.setStyleSheet("background-color:lightblue;")
+
+    def appsBtRelease(self, event):
+        self.appsBt.setStyleSheet("background-color:lightgray;")
+
+    def settingBtPress(self, event):
+        self.settingBt.setStyleSheet("background-color:lightblue;")
+
+    def settingBtRelease(self, event):
+        self.settingBt.setStyleSheet("background-color:lightgray;")    
